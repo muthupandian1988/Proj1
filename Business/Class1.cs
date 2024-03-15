@@ -1,4 +1,5 @@
-﻿namespace Business
+﻿
+namespace Business
 {
     public class BusinessTest
     {
@@ -6,7 +7,7 @@
         {
 
         }
-
+        
 
     }
 }
