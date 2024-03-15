@@ -8,7 +8,6 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  system.debug: true
 
 steps:
 
@@ -34,7 +33,11 @@ steps:
 - script: echo "Variable name after publish:$(Build.ArtifactStagingDirectory)"
 
 - script: echo "Variable name after publish BinariesDirectory:$(Build.BinariesDirectory)"
-
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'TestProject\TestProject.csproj'
+    testRunTitle: 'Test Project'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
