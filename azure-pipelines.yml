@@ -38,7 +38,8 @@ steps:
     command: 'test'
     projects: 'TestProject\TestProject.csproj'
     testRunTitle: 'Test Project'
-    arguments: "--collect:xunit --coverlet:cobertura"
+
+- script: dotnet reportgenerator -reports:coverage.xml -targetdir:coverage-report
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
