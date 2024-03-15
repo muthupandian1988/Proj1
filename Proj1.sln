@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proj1", "Proj1\Proj1.csproj", "{97B6EED2-D6CD-44A1-9300-63995C996D85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{F480CDB3-C727-4033-BB66-8D1E9E74F4F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{DD4430C9-EF5A-43DF-A20C-6993255F969C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97B6EED2-D6CD-44A1-9300-63995C996D85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B6EED2-D6CD-44A1-9300-63995C996D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B6EED2-D6CD-44A1-9300-63995C996D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B6EED2-D6CD-44A1-9300-63995C996D85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F480CDB3-C727-4033-BB66-8D1E9E74F4F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F480CDB3-C727-4033-BB66-8D1E9E74F4F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F480CDB3-C727-4033-BB66-8D1E9E74F4F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F480CDB3-C727-4033-BB66-8D1E9E74F4F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD4430C9-EF5A-43DF-A20C-6993255F969C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD4430C9-EF5A-43DF-A20C-6993255F969C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD4430C9-EF5A-43DF-A20C-6993255F969C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD4430C9-EF5A-43DF-A20C-6993255F969C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8891A414-AA2C-4FB6-836F-0E667E3DA34F}
+	EndGlobalSection
+EndGlobal
