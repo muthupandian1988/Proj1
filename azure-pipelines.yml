@@ -41,6 +41,7 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
 - task: PublishCodeCoverageResults@2
   inputs:
+    failIfCoverageEmpty: true
     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
 - task: PublishBuildArtifacts@1
