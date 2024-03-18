@@ -9,46 +9,52 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
+stages:
+  - stage: BuildStage
+    displayName: 'Build'
+    jobs:
+      - job: Buildjob
+        steps:
+        - task: DotNetCoreCLI@2
+          displayName: 'Restore Nuget' 
+          inputs:
+            command: 'restore'
+            projects: '$(solution)'
+            feedsToUse: 'select'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '$(solution)'
-    feedsToUse: 'select'
+        - task: DotNetCoreCLI@2
+          displayName: 'Build solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'build'
+            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    projects: '$(solution)'
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: DotNetCoreCLI@2
+          displayName: 'Publish solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'publish'
+            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: DotNetCoreCLI@2
+          displayName: 'Run tests'
+          inputs:
+            command: 'test'
+            projects: 'TestProject\TestProject.csproj'
+            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish code coverage' 
+          inputs:
+            failIfCoverageEmpty: true
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
-- script: echo "Variable name before publish:$(Build.ArtifactStagingDirectory)"
-- task: DotNetCoreCLI@2
-  inputs:
-    projects: '$(solution)'
-    command: 'publish'
-    configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-- task: DotNetCoreCLI@2
-  displayName: 'Run tests'
-  inputs:
-    command: 'test'
-    projects: 'TestProject\TestProject.csproj'
-    arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
-- task: PublishCodeCoverageResults@2
-  inputs:
-    failIfCoverageEmpty: true
-    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+        - task: PublishBuildArtifacts@1
+          displayName: 'Drop artifact' 
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+      
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Free Trial(2ab0ff65-ee81-4818-8778-7996eb386985)'
-    appType: 'webApp'
-    WebAppName: 'DevopsLearn'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+          
+        
+
