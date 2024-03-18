@@ -34,11 +34,16 @@ steps:
 
 - script: echo "Variable name after publish BinariesDirectory:$(Build.BinariesDirectory)"
 - task: DotNetCoreCLI@2
+  displayName: 'Run tests'
   inputs:
     command: 'test'
     projects: 'TestProject\TestProject.csproj'
-    testRunTitle: 'Test Project'
-    arguments: "--collect:nunit --coveralls:true"
+    arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
+- task: PublishCodeCoverageResults@2
+  inputs:
+    failIfCoverageEmpty: true
+    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
