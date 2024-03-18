@@ -24,7 +24,7 @@ namespace TestProject
         {
             Proj1.Controllers.WeatherForecastController c = new WeatherForecastController();
             var arr = c.Get();
-            Assert.Fail();
+            Assert.IsNotNull(arr);
         }
     }
 }
