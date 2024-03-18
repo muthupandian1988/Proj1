@@ -61,15 +61,15 @@ stages:
     jobs:
       - job:
         steps:
-        - script: echo 'DefaultWorkingDirectory is ' $(System.DefaultWorkingDirectory)
-        - task: AzureRmWebAppDeployment@4
-          displayName: "Deploying App service"
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'Free Trial(2ab0ff65-ee81-4818-8778-7996eb386985)'
-            appType: 'webApp'
-            WebAppName: 'DevopsLearn'
-            packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+        - script: echo 'DefaultWorkingDirectory is ' $(System.ArtifactsDirectory)
+        # - task: AzureRmWebAppDeployment@4
+        #   displayName: "Deploying App service"
+        #   inputs:
+        #     ConnectionType: 'AzureRM'
+        #     azureSubscription: 'Free Trial(2ab0ff65-ee81-4818-8778-7996eb386985)'
+        #     appType: 'webApp'
+        #     WebAppName: 'DevopsLearn'
+        #     packageForLinux: '$(System.ArtifactsDirectory)/drop/**/*.zip'
 
           
         
