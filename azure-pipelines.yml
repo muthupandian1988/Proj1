@@ -69,7 +69,7 @@ stages:
             azureSubscription: 'Free Trial(2ab0ff65-ee81-4818-8778-7996eb386985)'
             appType: 'webApp'
             WebAppName: 'DevopsLearn'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+            packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
 
           
         
