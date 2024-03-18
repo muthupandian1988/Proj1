@@ -16,7 +16,6 @@ stages:
       - job: Buildjob
         steps:
         
-
         - task: DotNetCoreCLI@2
           displayName: 'Restore Nuget' 
           inputs:
@@ -61,7 +60,15 @@ stages:
     jobs:
       - job:
         steps:
-        - script: echo 'DefaultWorkingDirectory is ' $(System.ArtifactsDirectory)
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'specific'
+            project: '067649f8-74f8-4f10-a456-d4201528fd64'
+            pipeline: '2'
+            buildVersionToDownload: 'latest'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.ArtifactsDirectory)'
         - task: AzureRmWebAppDeployment@4
           displayName: "Deploying App service"
           inputs:
