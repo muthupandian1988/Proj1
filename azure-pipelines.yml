@@ -68,13 +68,13 @@ stages:
             downloadPath: '$(System.ArtifactsDirectory)'
         
         - task: AzureRmWebAppDeployment@4
-          displayName: "Deploying App service"
           inputs:
             ConnectionType: 'AzureRM'
-            azureSubscription: 'Free Trial(2ab0ff65-ee81-4818-8778-7996eb386985)'
+            azureSubscription: 'DevopsLearnAppService'
             appType: 'webApp'
-            WebAppName: 'DevopsLearn'
-            packageForLinux: '$(System.ArtifactsDirectory)/drop/**/*.zip'
+            WebAppName: 'Dev-DevOpsLearn'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        
 
           
         
