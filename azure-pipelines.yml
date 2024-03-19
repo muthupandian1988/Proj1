@@ -78,3 +78,7 @@ stages:
     parameters:
       environment: 'QA'
       appservice: 'QA-DevopsLearn'
+  - template: 'QA-Prod-temp.yml'
+    parameters:
+      environment: 'Production'
+      appservice: 'Prod-DevopsLearn'
