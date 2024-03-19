@@ -60,6 +60,15 @@ stages:
     jobs:
       - job:
         steps:
+        - task: DownloadBuildArtifacts@1
+          inputs:
+            buildType: 'specific'
+            project: '067649f8-74f8-4f10-a456-d4201528fd64'
+            pipeline: '2'
+            buildVersionToDownload: 'latest'
+            downloadType: 'specific'
+            downloadPath: '$(System.ArtifactsDirectory)'
+            
         # - task: DownloadBuildArtifacts@1
         #   inputs:
         #     buildType: 'current'
