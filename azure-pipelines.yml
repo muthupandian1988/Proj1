@@ -9,45 +9,95 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
+stages:
+  - stage: BuildStage
+    displayName: 'Build'
+    jobs:
+      - job: Buildjob
+        steps:
+        
+        - task: DotNetCoreCLI@2
+          displayName: 'Restore Nuget' 
+          inputs:
+            command: 'restore'
+            projects: '$(solution)'
+            feedsToUse: 'select'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '$(solution)'
-    feedsToUse: 'select'
+        - task: DotNetCoreCLI@2
+          displayName: 'Build solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'build'
+            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    projects: '$(solution)'
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: DotNetCoreCLI@2
+          displayName: 'Run tests'
+          inputs:
+            command: 'test'
+            projects: 'TestProject\TestProject.csproj'
+            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish code coverage' 
+          inputs:
+            failIfCoverageEmpty: true
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
-- script: echo "Variable name before publish:$(Build.ArtifactStagingDirectory)"
-- task: DotNetCoreCLI@2
-  inputs:
-    projects: '$(solution)'
-    command: 'publish'
-    configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: DotNetCoreCLI@2
+          displayName: 'Publish solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'publish'
+            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)'
+            artifact: 'drop'
+            publishLocation: 'pipeline'
 
-- script: echo "Variable name after publish:$(Build.ArtifactStagingDirectory)"
+  - stage: DeployStageDev
+    displayName: 'Deploy Dev'
+    jobs:
+      - job:
+        steps:        
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'drop'
+            targetPath: '$(Pipeline.Workspace)/drop'
+        - powershell: |
+            Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
 
-- script: echo "Variable name after publish BinariesDirectory:$(Build.BinariesDirectory)"
-- task: DotNetCoreCLI@2
-  displayName: 'Run tests'
-  inputs:
-    command: 'test'
-    projects: 'TestProject\TestProject.csproj'
-    arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
-- task: PublishCodeCoverageResults@2
-  inputs:
-    failIfCoverageEmpty: true
-    summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'DevopsLearnAppService'
+            appType: 'webApp'
+            WebAppName: 'Dev-DevOpsLearn'
+            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+        
+  - stage: QAApprovalStage
+    displayName: 'QA Approval'
+    jobs:
+    - deployment: 'QAapproval'
+      displayName: 'QA Approval'
+      environment: 'QA'
+      strategy:
+        runOnce:
+          deploy:
+            steps:           
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                targetPath: '$(Pipeline.Workspace)/drop'
+            
+            - powershell: |
+                Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
-- script: echo "Variable name after publish build artifact:$(Build.ArtifactStagingDirectory)"
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'DevopsLearnAppService'
+                appType: 'webApp'
+                WebAppName: 'QA-DevOpsLearn'
+                packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
