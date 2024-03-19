@@ -75,29 +75,10 @@ stages:
             WebAppName: 'Dev-DevOpsLearn'
             packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
         
-  - stage: QAApprovalStage
-    displayName: 'QA Approval'
+  - stage: DeployStageQA
+    displayName: 'Deploy to QA'
     jobs:
-    - deployment: 'QAapproval'
-      displayName: 'QA Approval'
-      environment: 'QA'
-      strategy:
-        runOnce:
-          deploy:
-            steps:           
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                buildType: 'current'
-                artifactName: 'drop'
-                targetPath: '$(Pipeline.Workspace)/drop'
-            
-            - powershell: |
-                Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
-
-            - task: AzureRmWebAppDeployment@4
-              inputs:
-                ConnectionType: 'AzureRM'
-                azureSubscription: 'DevopsLearnAppService'
-                appType: 'webApp'
-                WebAppName: 'QA-DevOpsLearn'
-                packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+    - template: 'QA-Prod-temp.yml'
+      parameters:
+        environment: 'QA'
+        appservice: 'QA-DevopsLearn'
