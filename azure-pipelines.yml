@@ -31,23 +31,24 @@ stages:
             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
         - task: DotNetCoreCLI@2
-          displayName: 'Publish solution' 
-          inputs:
-            projects: '$(solution)'
-            command: 'publish'
-            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        - task: DotNetCoreCLI@2
           displayName: 'Run tests'
           inputs:
             command: 'test'
             projects: 'TestProject\TestProject.csproj'
-            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'
+            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
         - task: PublishCodeCoverageResults@2
           displayName: 'Publish code coverage' 
           inputs:
             failIfCoverageEmpty: true
             summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
+        - task: DotNetCoreCLI@2
+          displayName: 'Publish solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'publish'
+            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+       
         - task: PublishBuildArtifacts@1
           displayName: 'Drop artifact' 
           inputs:
