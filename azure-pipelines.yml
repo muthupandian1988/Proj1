@@ -48,28 +48,27 @@ stages:
             projects: '$(solution)'
             command: 'publish'
             configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-           
-        - task: PublishBuildArtifacts@1
-          displayName: 'Drop artifact' 
+        - task: PublishPipelineArtifact@1
           inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
-            StoreAsTar: true
+            targetPath: '$(Build.ArtifactStagingDirectory)/drop.zip'
+            artifact: 'drop'
+            publishLocation: 'pipeline'
 
   - stage: DeployStage
     displayName: 'Deploy'
     jobs:
       - job:
         steps:
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'specific'
-            project: '067649f8-74f8-4f10-a456-d4201528fd64'
-            pipeline: '2'
-            buildVersionToDownload: 'latest'
-            downloadType: 'specific'
-            downloadPath: '$(System.ArtifactsDirectory)'
+        
+
+        # - task: DownloadBuildArtifacts@1
+        #   inputs:
+        #     buildType: 'specific'
+        #     project: '067649f8-74f8-4f10-a456-d4201528fd64'
+        #     pipeline: '2'
+        #     buildVersionToDownload: 'latest'
+        #     downloadType: 'specific'
+        #     downloadPath: '$(System.ArtifactsDirectory)'
         # - script: |
         #     echo "Structure of work folder of this pipeline:"
         #     tree $(System.ArtifactsDirectory) /f
@@ -83,6 +82,11 @@ stages:
         #     downloadType: 'single'
         #     artifactName: 'drop'
         #     downloadPath: '$(System.ArtifactsDirectory)'
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'drop'
+            targetPath: '$(Pipeline.Workspace)'
         # - powershell: |
         #     Compress-Archive -Path "$(System.ArtifactsDirectory)/drop/*" -DestinationPath "$(System.ArtifactsDirectory)/drop.zip" -Force
 
@@ -92,7 +96,7 @@ stages:
             azureSubscription: 'DevopsLearnAppService'
             appType: 'webApp'
             WebAppName: 'Dev-DevOpsLearn'
-            packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
         
 
           
