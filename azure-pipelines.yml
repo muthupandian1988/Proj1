@@ -78,16 +78,14 @@ stages:
   - stage: QAApprovalStage
     displayName: 'QA Approval'
     jobs:
-    - deployment: QAapproval
+    - deployment: 'QAapproval'
       displayName: 'QA Approval'
       environment: 'QA'
       strategy:
         runOnce:
           deploy:
-            steps:
-            - task: ManualValidation@0
-              inputs:
-                notifyUsers: 'muthupandian8@gmail.com,coolkumarraji@gmail.com'
+            steps:           
+             - script: echo 'Hello world'
               
   - stage: QADeploymentStage
     displayName: "QA Deployment"
