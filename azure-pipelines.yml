@@ -48,13 +48,14 @@ stages:
             projects: '$(solution)'
             command: 'publish'
             configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-       
+           
         - task: PublishBuildArtifacts@1
           displayName: 'Drop artifact' 
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'drop'
             publishLocation: 'Container'
+            StoreAsTar: true
 
   - stage: DeployStage
     displayName: 'Deploy'
@@ -69,11 +70,11 @@ stages:
             buildVersionToDownload: 'latest'
             downloadType: 'specific'
             downloadPath: '$(System.ArtifactsDirectory)'
-        - script: |
-            echo "Structure of work folder of this pipeline:"
-            tree $(System.ArtifactsDirectory) /f
-            echo "Build.ArtifactsDirectory:" 
-            echo "$(Build.ArtifactsDirectory)"
+        # - script: |
+        #     echo "Structure of work folder of this pipeline:"
+        #     tree $(System.ArtifactsDirectory) /f
+        #     echo "Build.ArtifactsDirectory:" 
+        #     echo "$(Build.ArtifactsDirectory)"
           
 
         # - task: DownloadBuildArtifacts@1
