@@ -4,25 +4,25 @@ parameters:
 - name: appservice
   default: ''
 
-  jobs:
-    - deployment: ${{parameters.environment }}
-      displayName: ${{parameters.environment }} 'deployment'
-      environment: ${{parameters.environment }}
-      strategy:
-        runOnce:
-          deploy:
-            steps:           
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                buildType: 'current'
-                artifactName: 'drop'
-                targetPath: '$(Pipeline.Workspace)/drop'
+jobs:
+  - deployment: ${{parameters.environment }}
+    displayName: ${{parameters.environment }} 'deployment'
+    environment: ${{parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:           
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              artifactName: 'drop'
+              targetPath: '$(Pipeline.Workspace)/drop'
             
-            - powershell: |
-                Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
+          - powershell: |
+              Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
 
-            - task: AzureRmWebAppDeployment@4
-              inputs:
+          - task: AzureRmWebAppDeployment@4
+            inputs:
                 ConnectionType: 'AzureRM'
                 azureSubscription: 'DevopsLearnAppService'
                 appType: 'webApp'
