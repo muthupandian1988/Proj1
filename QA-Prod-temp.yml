@@ -1,0 +1,33 @@
+parameters:
+- name: environment  # defaults for any parameters that aren't specified
+  default: ''
+- name: appservice
+  default: ''
+
+  stages:
+  - stage: ${{parameters.environment }}
+    displayName: ${{parameters.environment }} 'deployment'
+    jobs:
+    - deployment: ${{parameters.environment }}
+      displayName: ${{parameters.environment }} 'deployment'
+      environment: ${{parameters.environment }}
+      strategy:
+        runOnce:
+          deploy:
+            steps:           
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                targetPath: '$(Pipeline.Workspace)/drop'
+            
+            - powershell: |
+                Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
+
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'DevopsLearnAppService'
+                appType: 'webApp'
+                WebAppName: ${{parameters.appservice }}
+                packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
