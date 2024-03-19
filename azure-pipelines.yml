@@ -69,7 +69,13 @@ stages:
             buildVersionToDownload: 'latest'
             downloadType: 'specific'
             downloadPath: '$(System.ArtifactsDirectory)'
-            
+        - script: |
+            echo "Structure of work folder of this pipeline:"
+            tree $(System.ArtifactsDirectory)\1 /f
+            echo "Build.ArtifactsDirectory:" 
+            echo "$(Build.ArtifactsDirectory)"
+          
+
         # - task: DownloadBuildArtifacts@1
         #   inputs:
         #     buildType: 'current'
