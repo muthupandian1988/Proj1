@@ -74,11 +74,7 @@ stages:
             appType: 'webApp'
             WebAppName: 'Dev-DevOpsLearn'
             packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
-        
-  - stage: DeployStageQA
-    displayName: 'Deploy to QA'
-    jobs:
-    - template: 'QA-Prod-temp.yml'
-      parameters:
-        environment: 'QA'
-        appservice: 'QA-DevopsLearn'
+  - template: 'QA-Prod-temp.yml'
+    parameters:
+      environment: 'QA'
+      appservice: 'QA-DevopsLearn'
