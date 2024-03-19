@@ -86,7 +86,7 @@ stages:
           inputs:
             buildType: 'current'
             artifactName: 'drop'
-            targetPath: '$(Pipeline.Workspace)'
+            targetPath: '$(Pipeline.Workspace)/drop'
         - powershell: |
             Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
 
