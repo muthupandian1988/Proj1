@@ -5,7 +5,7 @@ parameters:
   default: ''
 
 stages:
-  - stage: DeployStage ${{parameters.environment}}
+  - stage: DeployStage${{parameters.environment}}
     displayName: ' Deployed to ${{parameters.environment}}'
     jobs:
       - deployment: ${{parameters.environment }}
