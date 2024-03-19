@@ -60,14 +60,14 @@ stages:
     jobs:
       - job:
         steps:
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'current'
-            downloadType: 'single'
-            artifactName: 'drop'
-            downloadPath: '$(System.ArtifactsDirectory)'
-        - powershell: |
-            Compress-Archive -Path "$(System.ArtifactsDirectory)/drop/*" -DestinationPath "$(System.ArtifactsDirectory)/drop.zip" -Force
+        # - task: DownloadBuildArtifacts@1
+        #   inputs:
+        #     buildType: 'current'
+        #     downloadType: 'single'
+        #     artifactName: 'drop'
+        #     downloadPath: '$(System.ArtifactsDirectory)'
+        # - powershell: |
+        #     Compress-Archive -Path "$(System.ArtifactsDirectory)/drop/*" -DestinationPath "$(System.ArtifactsDirectory)/drop.zip" -Force
 
         - task: AzureRmWebAppDeployment@4
           inputs:
