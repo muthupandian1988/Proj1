@@ -29,7 +29,12 @@ stages:
             projects: '$(solution)'
             command: 'build'
             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-
+        - script: |
+            echo "Structure of work folder of this pipeline:"
+            tree $(Build.ArtifactStagingDirectory)/f
+            echo "Build.ArtifactsDirectory:" 
+            echo "$(Build.ArtifactStagingDirectory)"
+          
         - task: DotNetCoreCLI@2
           displayName: 'Run tests'
           inputs:
@@ -48,6 +53,11 @@ stages:
             projects: '$(solution)'
             command: 'publish'
             configuration: '--c $(buildConfiguration) '
+        - script: |
+            echo "Structure of work folder of this pipeline:"
+            tree $(Build.ArtifactStagingDirectory)/f
+            echo "Build.ArtifactsDirectory:" 
+            echo "$(Build.ArtifactStagingDirectory)"
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
