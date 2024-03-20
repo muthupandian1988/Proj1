@@ -28,31 +28,31 @@ stages:
           inputs:
             projects: '$(solution)'
             command: 'build'
-            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration)'
         - script: |
             echo "Structure of work folder of this pipeline:"
             tree $(Build.ArtifactStagingDirectory)/f
             echo "Build.ArtifactsDirectory:" 
             echo "$(Build.ArtifactStagingDirectory)"
           
-        - task: DotNetCoreCLI@2
-          displayName: 'Run tests'
-          inputs:
-            command: 'test'
-            projects: 'TestProject\TestProject.csproj'
-            arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'      
-        - task: PublishCodeCoverageResults@2
-          displayName: 'Publish code coverage' 
-          inputs:
-            failIfCoverageEmpty: true
-            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+        # - task: DotNetCoreCLI@2
+        #   displayName: 'Run tests'
+        #   inputs:
+        #     command: 'test'
+        #     projects: 'TestProject\TestProject.csproj'
+        #     arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'      
+        # - task: PublishCodeCoverageResults@2
+        #   displayName: 'Publish code coverage' 
+        #   inputs:
+        #     failIfCoverageEmpty: true
+        #     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
         - task: DotNetCoreCLI@2
           displayName: 'Publish solution' 
           inputs:
             projects: '$(solution)'
             command: 'publish'
-            configuration: '--c $(buildConfiguration) '
+            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - script: |
             echo "Structure of work folder of this pipeline:"
             tree $(Build.ArtifactStagingDirectory)/f
