@@ -45,7 +45,7 @@ stages:
         - task: DotNetCoreCLI@2
           displayName: 'Publish solution' 
           inputs:
-            projects: 'Proj1\Proj1.csproj'
+            projects: '$(solution)'
             command: 'publish'
             configuration: '--c $(buildConfiguration) '
         - task: PublishPipelineArtifact@1
