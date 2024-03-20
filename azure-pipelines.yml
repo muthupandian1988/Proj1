@@ -35,7 +35,7 @@ stages:
           inputs:
             command: 'test'
             projects: 'TestProject\TestProject.csproj'
-            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
+            arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'      
         - task: PublishCodeCoverageResults@2
           displayName: 'Publish code coverage' 
           inputs:
@@ -54,31 +54,31 @@ stages:
             artifact: 'drop'
             publishLocation: 'pipeline'
 
-  - stage: DeployStageDev
-    displayName: 'Deploy Dev'
-    jobs:
-      - job:
-        steps:        
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            buildType: 'current'
-            artifactName: 'drop'
-            targetPath: '$(Pipeline.Workspace)/drop'
-        - powershell: |
-            Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
+  # - stage: DeployStageDev
+  #   displayName: 'Deploy Dev'
+  #   jobs:
+  #     - job:
+  #       steps:        
+  #       - task: DownloadPipelineArtifact@2
+  #         inputs:
+  #           buildType: 'current'
+  #           artifactName: 'drop'
+  #           targetPath: '$(Pipeline.Workspace)/drop'
+  #       - powershell: |
+  #           Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
 
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'DevopsLearnAppService'
-            appType: 'webApp'
-            WebAppName: 'Dev-DevOpsLearn'
-            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
-  - template: 'QA-Prod-temp.yml'
-    parameters:
-      environment: 'QA'
-      appservice: 'QA-DevopsLearn'
-  - template: 'QA-Prod-temp.yml'
-    parameters:
-      environment: 'Production'
-      appservice: 'Prod-DevopsLearn'
+  #       - task: AzureRmWebAppDeployment@4
+  #         inputs:
+  #           ConnectionType: 'AzureRM'
+  #           azureSubscription: 'DevopsLearnAppService'
+  #           appType: 'webApp'
+  #           WebAppName: 'Dev-DevOpsLearn'
+  #           packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+  # - template: 'QA-Prod-temp.yml'
+  #   parameters:
+  #     environment: 'QA'
+  #     appservice: 'QA-DevopsLearn'
+  # - template: 'QA-Prod-temp.yml'
+  #   parameters:
+  #     environment: 'Production'
+  #     appservice: 'Prod-DevopsLearn'
