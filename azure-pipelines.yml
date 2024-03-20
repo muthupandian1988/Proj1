@@ -64,26 +64,26 @@ stages:
             artifact: 'drop'
             publishLocation: 'pipeline'
 
-  # - stage: DeployStageDev
-  #   displayName: 'Deploy Dev'
-  #   jobs:
-  #     - job:
-  #       steps:        
-  #       - task: DownloadPipelineArtifact@2
-  #         inputs:
-  #           buildType: 'current'
-  #           artifactName: 'drop'
-  #           targetPath: '$(Pipeline.Workspace)/drop'
-  #       - powershell: |
-  #           Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
+  - stage: DeployStageDev
+    displayName: 'Deploy Dev'
+    jobs:
+      - job:
+        steps:        
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'drop'
+            targetPath: '$(Pipeline.Workspace)/drop'
+        - powershell: |
+            Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
 
-  #       - task: AzureRmWebAppDeployment@4
-  #         inputs:
-  #           ConnectionType: 'AzureRM'
-  #           azureSubscription: 'DevopsLearnAppService'
-  #           appType: 'webApp'
-  #           WebAppName: 'Dev-DevOpsLearn'
-  #           packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'DevopsLearnAppService'
+            appType: 'webApp'
+            WebAppName: 'Dev-DevOpsLearn'
+            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
   # - template: 'QA-Prod-temp.yml'
   #   parameters:
   #     environment: 'QA'
