@@ -31,7 +31,7 @@ stages:
             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - script: |
             echo "Structure of work folder of this pipeline:"
-            tree $(Build.ArtifactStagingDirectory)/f
+            tree $(Build.ArtifactStagingDirectory)
             echo "Build.ArtifactsDirectory:" 
             echo "$(Build.ArtifactStagingDirectory)"
           
@@ -55,7 +55,7 @@ stages:
             configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - script: |
             echo "Structure of work folder of this pipeline:"
-            tree $(Build.ArtifactStagingDirectory)/f
+            tree $(Build.ArtifactStagingDirectory)
             echo "Build.ArtifactsDirectory:" 
             echo "$(Build.ArtifactStagingDirectory)"
         - task: PublishPipelineArtifact@1
