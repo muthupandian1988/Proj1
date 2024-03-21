@@ -52,6 +52,7 @@ stages:
           inputs:
             projects: 'Proj1/Proj1.csproj'
             command: 'publish'
+            publishWebProjects: true
             configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - script: |
             echo "Structure of work folder of this pipeline:"
