@@ -1,5 +1,7 @@
 trigger:
 - main
+- dev
+- QA
 
 pool:
   vmImage: 'windows-latest'
@@ -13,6 +15,7 @@ variables:
     env: 'QA'
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
+  environment : 'development'
   buildConfiguration: 'Release'
   #env: ${{ if eq(variables['Build.SourceBranchName'], 'master') }}'Production'${{ else }}'dev'${{ endif }}
     
@@ -31,6 +34,7 @@ steps:
 #       - job: Buildjob
 #         steps:
         
+
 #         - task: DotNetCoreCLI@2
 #           displayName: 'Restore Nuget' 
 #           inputs:
@@ -97,3 +101,4 @@ steps:
     # parameters:
     #   environment: 'Production'
     #   appservice: 'Prod-DevopsLearn'
+
