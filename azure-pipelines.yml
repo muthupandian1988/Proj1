@@ -52,7 +52,7 @@ stages:
           inputs:
             command: 'publish'
             publishWebProjects: true
-            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            configuration: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - script: |
             echo "Structure of work folder of this pipeline:"
             tree $(Build.ArtifactStagingDirectory)
