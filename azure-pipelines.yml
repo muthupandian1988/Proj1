@@ -21,7 +21,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      echo 'Source branch name is : $(buildVersion)
+      echo 'Source branch name is :' $(buildVersion)
 # stages:
 #   - stage: BuildStage
 #     displayName: 'Build'
