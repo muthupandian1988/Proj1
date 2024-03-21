@@ -6,9 +6,11 @@ pool:
 
 variables:
   ${{ if eq( variables['Build.SourceBranchName'], 'master' ) }}: 
-    buildVersion: ${{ variables['mavenVersion'] }}
-  ${{ if ne( variables['Build.SourceBranchName'], 'master' ) }}: 
-    buildVersion: ${{ variables['Build.SourceBranchName'] }}
+    env: 'Production'
+  ${{ if eq( variables['Build.SourceBranchName'], 'dev' ) }}: 
+    env: 'dev'
+  ${{ if eq( variables['Build.SourceBranchName'], 'QA' ) }}: 
+    env: 'QA'
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
