@@ -15,7 +15,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      echo $(Build.SourceBranchName)
+      echo 'Source branch name is :' $(Build.SourceBranchName)
 # stages:
 #   - stage: BuildStage
 #     displayName: 'Build'
