@@ -28,7 +28,7 @@ stages:
           inputs:
             projects: 'Proj1/Proj1.csproj'
             command: 'build'
-            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration) '
         - script: |
             echo "Structure of work folder of this pipeline:"
             tree $(Build.ArtifactStagingDirectory)
