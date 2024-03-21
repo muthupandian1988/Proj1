@@ -5,9 +5,15 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
+  ${{ if eq( variables['Build.SourceBranchName'], 'master' ) }}: 
+    buildVersion: ${{ variables['mavenVersion'] }}
+  ${{ if ne( variables['Build.SourceBranchName'], 'master' ) }}: 
+    buildVersion: ${{ variables['Build.SourceBranchName'] }}
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  #env: ${{ if eq(variables['Build.SourceBranchName'], 'master') }}'Production'${{ else }}'dev'${{ endif }}
+    
 
 steps:
 - task: Bash@3
@@ -15,7 +21,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      echo 'Source branch name is :' $(Build.SourceBranchName)
+      echo 'Source branch name is : $(buildVersion)
 # stages:
 #   - stage: BuildStage
 #     displayName: 'Build'
