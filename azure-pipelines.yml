@@ -61,7 +61,7 @@ stages:
           inputs:
             projects: '$(solution)'
             command: 'publish'
-            arguments: '--c $(buildConfiguration) --environment $(Build.SourceBranchName) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
