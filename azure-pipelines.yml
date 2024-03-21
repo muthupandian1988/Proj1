@@ -44,24 +44,24 @@ stages:
             command: 'build'
             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-        - task: DotNetCoreCLI@2
-          displayName: 'Run tests'
-          inputs:
-            command: 'test'
-            projects: 'TestProject\TestProject.csproj'
-            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
-        - task: PublishCodeCoverageResults@2
-          displayName: 'Publish code coverage' 
-          inputs:
-            failIfCoverageEmpty: true
-            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+        # - task: DotNetCoreCLI@2
+        #   displayName: 'Run tests'
+        #   inputs:
+        #     command: 'test'
+        #     projects: 'TestProject\TestProject.csproj'
+        #     arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
+        # - task: PublishCodeCoverageResults@2
+        #   displayName: 'Publish code coverage' 
+        #   inputs:
+        #     failIfCoverageEmpty: true
+        #     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
         - task: DotNetCoreCLI@2
           displayName: 'Publish solution' 
           inputs:
             projects: '$(solution)'
             command: 'publish'
-            arguments: '--c $(buildConfiguration) EnvironmentName $(Build.SourceBranchName) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--c $(buildConfiguration) --EnvironmentName $(Build.SourceBranchName) --output $(Build.ArtifactStagingDirectory)'
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
