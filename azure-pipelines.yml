@@ -20,16 +20,15 @@ stages:
           displayName: 'Restore Nuget' 
           inputs:
             command: 'restore'
-            projects: '$(solution)'
+            projects: '**/*.csproj'
             feedsToUse: 'select'
 
         - task: DotNetCoreCLI@2
           displayName: 'Build solution' 
           inputs:
-            projects: 'Proj1/Proj1.csproj'
+            projects: '**/*.csproj'
             command: 'build'
-
-            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration) '
         - script: |
             echo "Structure of work folder of this pipeline:"
             tree $(Build.ArtifactStagingDirectory)
@@ -51,7 +50,7 @@ stages:
         - task: DotNetCoreCLI@2
           displayName: 'Publish solution' 
           inputs:
-            projects: 'Proj1/Proj1.csproj'
+            # projects: 'Proj1/Proj1.csproj'
             command: 'publish'
             publishWebProjects: true
             configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
