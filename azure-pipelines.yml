@@ -35,17 +35,17 @@ stages:
             echo "Build.ArtifactsDirectory:" 
             echo $(build.sourcesdirectory)
           
-        # - task: DotNetCoreCLI@2
-        #   displayName: 'Run tests'
-        #   inputs:
-        #     command: 'test'
-        #     projects: 'TestProject\TestProject.csproj'
-        #     arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'      
-        # - task: PublishCodeCoverageResults@2
-        #   displayName: 'Publish code coverage' 
-        #   inputs:
-        #     failIfCoverageEmpty: true
-        #     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+        - task: DotNetCoreCLI@2
+          displayName: 'Run tests'
+          inputs:
+            command: 'test'
+            projects: 'TestProject\TestProject.csproj'
+            arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage"'      
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish code coverage' 
+          inputs:
+            failIfCoverageEmpty: true
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
         - task: DotNetCoreCLI@2
           displayName: 'Publish solution' 
@@ -53,37 +53,30 @@ stages:
             command: 'publish'
             publishWebProjects: true
             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        - script: |
-            echo "Structure of work folder of this pipeline:"
-            tree $(Build.ArtifactStagingDirectory)
-            echo "Build.ArtifactsDirectory:" 
-            echo "$(Build.ArtifactStagingDirectory)"
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
             artifact: 'drop'
             publishLocation: 'pipeline'
 
-  # - stage: DeployStageDev
-    # displayName: 'Deploy Dev'
-    # jobs:
-    #   - job:
-    #     steps:        
-    #     - task: DownloadPipelineArtifact@2
-    #       inputs:
-    #         buildType: 'current'
-    #         artifactName: 'drop'
-    #         targetPath: '$(Pipeline.Workspace)/drop'
-    #     - powershell: |
-    #         Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
+  - stage: DeployStageDev
+    displayName: 'Deploy Dev'
+    jobs:
+      - job:
+        steps:        
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            artifactName: 'drop'
+            targetPath: '$(Pipeline.Workspace)/drop'
 
-    #     - task: AzureRmWebAppDeployment@4
-    #       inputs:
-    #         ConnectionType: 'AzureRM'
-    #         azureSubscription: 'DevopsLearnAppService'
-    #         appType: 'webApp'
-    #         WebAppName: 'Dev-DevOpsLearn'
-    #         packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'DevopsLearnAppService'
+            appType: 'webApp'
+            WebAppName: 'Dev-DevOpsLearn'
+            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
   # - template: 'QA-Prod-temp.yml'
   #   parameters:
   #     environment: 'QA'
