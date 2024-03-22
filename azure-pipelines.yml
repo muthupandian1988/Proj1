@@ -10,82 +10,85 @@ variables:
   
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  environment : 'development'
+  environment: 'development'
   buildConfiguration: 'Release'
-  #env: ${{ if eq(variables['Build.SourceBranchName'], 'master') }}'Production'${{ else }}'dev'${{ endif }}
+  isDev : eq(variables['Build.SourceBranchName'], 'master')
+  #env: ${{ if eq(variables['Build.SourceBranchName'], 'master') }} 'Production' ${{ elif eq(variables['Build.SourceBranchName'], 'QA')}} 'QA' ${{ else }} 'dev' ${{ endif }}
 
-#steps:
-# - task: Bash@3
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       # Write your commands here
-#       echo 'Source branch name is :' $(env)
 
-stages:
-  - stage: BuildStage
-    displayName: 'Build'
-    jobs:
-      - job: Buildjob
-        steps:
+steps:
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      if eq(variables['Build.SourceBranchName'], 'master') then env: 'Production'  elif eq(variables['Build.SourceBranchName'], 'QA') env:'QA'  else  env:'dev'  endif 
+      echo 'Environment name is' $(env)
+
+# stages:
+#   - stage: BuildStage
+#     displayName: 'Build'
+#     jobs:
+#       - job: Buildjob
+#         steps:
         
+#         - task: DotNetCoreCLI@2
+#           displayName: 'Restore Nuget' 
+#           inputs:
+#             command: 'restore'
+#             projects: '$(solution)'
+#             feedsToUse: 'select'
 
-        - task: DotNetCoreCLI@2
-          displayName: 'Restore Nuget' 
-          inputs:
-            command: 'restore'
-            projects: '$(solution)'
-            feedsToUse: 'select'
+#         - task: DotNetCoreCLI@2
+#           displayName: 'Build solution' 
+#           inputs:
+#             projects: '$(solution)'
+#             command: 'build'
+#             arguments: '--configuration $(buildConfiguration)'
 
-        - task: DotNetCoreCLI@2
-          displayName: 'Build solution' 
-          inputs:
-            projects: '$(solution)'
-            command: 'build'
-            arguments: '--configuration $(buildConfiguration)'
+#         - task: DotNetCoreCLI@2
+#           displayName: 'Run tests'
+#           inputs:
+#             command: 'test'
+#             projects: 'TestProject\TestProject.csproj'
+#             arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
+#         - task: PublishCodeCoverageResults@2
+#           displayName: 'Publish code coverage' 
+#           inputs:
+#             failIfCoverageEmpty: true
+#             summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
-        # - task: DotNetCoreCLI@2
-        #   displayName: 'Run tests'
-        #   inputs:
-        #     command: 'test'
-        #     projects: 'TestProject\TestProject.csproj'
-        #     arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
-        # - task: PublishCodeCoverageResults@2
-        #   displayName: 'Publish code coverage' 
-        #   inputs:
-        #     failIfCoverageEmpty: true
-        #     summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+#         - task: DotNetCoreCLI@2
+#           displayName: 'Publish solution' 
+#           inputs:
+#             command: 'publish'
+#             publishWebProjects: true
+#             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+#         - task: PublishPipelineArtifact@1
+#           inputs:
+#             targetPath: '$(Build.ArtifactStagingDirectory)'
+#             artifact: 'drop'
+#             publishLocation: 'pipeline'
 
-        - task: DotNetCoreCLI@2
-          displayName: 'Publish solution' 
-          inputs:
-            command: 'publish'
-            publishWebProjects: true
-            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        - task: PublishPipelineArtifact@1
-          inputs:
-            targetPath: '$(Build.ArtifactStagingDirectory)'
-            artifact: 'drop'
-            publishLocation: 'pipeline'
+  # - stage: DeployStageDev
+  #   displayName: 'Deploy Dev'
+  #   condition: ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}
+  #   jobs:
+      # - job:
+      #   steps:        
+      #   - task: DownloadPipelineArtifact@2
+      #     inputs:
+      #       buildType: 'current'
+      #       artifactName: 'drop'
+      #       targetPath: '$(Pipeline.Workspace)/drop'
 
-  - stage: DeployStageDev
-    displayName: 'Deploy Dev'
-    jobs:
-      - job:
-        steps:        
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            buildType: 'current'
-            artifactName: 'drop'
-            targetPath: '$(Pipeline.Workspace)/drop'
-
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'DevopsLearnAppService'
-            appType: 'webApp'
-            WebAppName: 'Dev-DevOpsLearn'
-            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+      #   - task: AzureRmWebAppDeployment@4
+      #     inputs:
+      #       ConnectionType: 'AzureRM'
+      #       azureSubscription: 'DevopsLearnAppService'
+      #       appType: 'webApp'
+      #       WebAppName: 'Dev-DevOpsLearn'
+      #       packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
   # - template: 'QA-Prod-temp.yml'
   #   parameters:
   #     environment: 'QA'
