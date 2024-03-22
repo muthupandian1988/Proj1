@@ -7,6 +7,7 @@ namespace Proj1.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
+        private readonly Connections _allConnections;
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -14,9 +15,10 @@ namespace Proj1.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(IWebHostEnvironment env)
+        public WeatherForecastController(IWebHostEnvironment env,Connections allConnections)
         {
             _env = env;
+            _allConnections = allConnections;
         }
 
 
@@ -35,7 +37,7 @@ namespace Proj1.Controllers
         [HttpPost(Name = "GetEnvironmentName")]
         public IActionResult GetEnvironmentName()
         {
-            return Ok(_env.EnvironmentName);
+            return Ok(_allConnections);
         }
     }
 }
