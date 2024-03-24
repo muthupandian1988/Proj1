@@ -17,6 +17,8 @@ variables:
 
 steps:
 
+
+
 - task: Bash@3
   inputs:
     filePath: '1.sh'
@@ -27,6 +29,7 @@ steps:
     script: |
       # Write your commands here
       echo 'Source branch name is :' $(Build.SourceBranchName)
+    
 # stages:
 #   - stage: BuildStage
 #     displayName: 'Build'
