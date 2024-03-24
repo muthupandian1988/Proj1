@@ -1,13 +1,13 @@
-
-env = 'dev'
-if [$1 == 'Master']
+#!/bin/bash   
+branch=$1
+env="dev"
+if [ "$1" == "Master" ];
 then
-	$env = 'Production'
-el if [$1 == 'QA']
+	echo 'Production'
+elif [ "$1" == "QA" ];
 then
-	$env = 'QA'
+	echo "QA"
 else
-	$env = 'dev'
+	
+	echo "dev"
 fi
-
-echo env
