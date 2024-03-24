@@ -1,2 +1,13 @@
-echo "First arg: $1"
-echo "Second arg: $2"
+
+env = 'dev'
+if [$1 == 'Master']
+then
+	$env = 'Production'
+el if [$1 == 'QA']
+then
+	$env = 'QA'
+else
+	$env = 'dev'
+fi
+
+echo env
