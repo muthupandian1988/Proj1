@@ -6,17 +6,19 @@ namespace Proj1.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly IWebHostEnvironment _env;
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController()
+        public WeatherForecastController(IWebHostEnvironment env)
         {
-            
+            _env = env;
         }
+
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
@@ -28,6 +30,12 @@ namespace Proj1.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpPost(Name = "GetEnvironmentName")]
+        public IActionResult GetEnvironmentName()
+        {
+            return Ok(_env.EnvironmentName);
         }
     }
 }
