@@ -1,6 +1,7 @@
 #!/bin/bash   
 branch=$1
 env="dev"
+echo $1
 if [ "$1" == "Master" ];
 then
 	echo 'Production'
