@@ -1,19 +1,15 @@
-
-
 stages:
   - stage: DeployStage$[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
     displayName: ' Deployed to $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]'
     dependsOn: ChooseEnvStage
     jobs:
       - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']] 'deployment'
+        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
         environment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
         strategy:
           runOnce:
             deploy:
               steps:
-                
-      
                 - task: DownloadPipelineArtifact@2
                   inputs:
                     buildType: 'current'
