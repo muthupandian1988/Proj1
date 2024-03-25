@@ -7,7 +7,6 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  env: 'dev'
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   environment : 'development'
