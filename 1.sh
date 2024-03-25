@@ -4,7 +4,11 @@ env="dev"
 shopt -s nocasematch
 if [ "$1" == "master" ];
 then
-	echo 'Production Production-Appservice'
+	case $1 in 'env')
+	echo 'Production'
+	;;
+	'appservice'
+	echo Production-Appservice'
 elif [ "$1" == "QA" ];
 then
 	echo "QA"
