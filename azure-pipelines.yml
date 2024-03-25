@@ -27,8 +27,12 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      env="$(./1.sh $(Build.SourceBranchName))"
-      echo "##vso[task.setvariable variable=env]$env"
+      COMMAND_OUTPUT="$(./1.sh $(Build.SourceBranchName))"
+      env=$(echo "$COMMAND_OUTPUT" | awk '{print $1}')
+      app_service=$(echo "$COMMAND_OUTPUT" | awk '{print $2}')
+      echo "##vso[task.setvariable variable=env;isOutput=true]$env"
+      echo "##vso[task.setvariable variable=app_service;isOutput=true]$app_service"
+
 
 - task: Bash@3
   inputs:
@@ -36,6 +40,7 @@ steps:
     script: |
       # Write your commands here
       echo $(env)
+      echo $(app_service)
       
     
 # stages:
