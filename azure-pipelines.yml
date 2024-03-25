@@ -43,7 +43,7 @@ steps:
     script: |
       # Write your commands here
       echo $(env)
-      echo $(app_service)
+      echo $(appservice)
       
     
 # stages:
