@@ -24,9 +24,9 @@ stages:
     displayName: "Deployed to App service"
     dependsOn: ChooseEnvStage
     jobs:
-      - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['ChooseEnvJob.env']]
-        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['ChooseEnvJob.env']]
-        environment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['ChooseEnvJob.env']]
+      - deployment: $env
+        displayName: $env
+        environment: $env
         strategy:
           runOnce:
             deploy:
@@ -45,5 +45,5 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'DevopsLearnAppService'
                     appType: 'webApp'
-                    WebAppName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['appservice']]
+                    WebAppName: $appservice
                     packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
