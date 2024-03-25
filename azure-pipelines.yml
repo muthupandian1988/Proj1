@@ -12,7 +12,7 @@ variables:
   buildPlatform: 'Any CPU'
   environment : 'development'
   buildConfiguration: 'Release'
-  #env: ${{ if eq(variables['Build.SourceBranchName'], 'master') }}'Production'${{ else }}'dev'${{ endif }}
+  fileversion: 'dssss'
     
 
 steps:
