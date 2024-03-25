@@ -16,12 +16,10 @@ variables:
 steps:
 
 
-
 - task: Bash@3
   inputs:
     filePath: '1.sh'
-    arguments: 'env''$(Build.SourceBranchName)'
-
+    arguments: 'env $(Build.SourceBranchName)'
 - task: Bash@3
   inputs:
     targetType: 'inline'
