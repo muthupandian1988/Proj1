@@ -23,12 +23,14 @@ steps:
   inputs:
     filePath: '1.sh'
     arguments: '$(Build.SourceBranchName)'
+
 - task: Bash@3
   inputs:
     targetType: 'inline'
     script: |
       # Write your commands here
-      echo 'Source branch name is :' $(Build.SourceBranchName)
+      ##vso[task.setvariable variable=FILE_VERSION]$(./1.sh)
+      echo $(FILE_VERSION)
     
 # stages:
 #   - stage: BuildStage
