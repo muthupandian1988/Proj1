@@ -27,7 +27,7 @@ stages:
     dependsOn: ChooseEnvStage
     jobs:
       - deployment: $[ stageDependencies.{ChooseEnvStage}.{ChooseEnvJob}.outputs['{envscript}.{env}'] 
-        displayName: $[ stageDependencies.{ChooseEnvStage}.{ChooseEnvJob}.outputs['{envscript}.{env}'] 
+        displayName: 'Deployment'
         environment: $[ stageDependencies.{ChooseEnvStage}.{ChooseEnvJob}.outputs['{envscript}.{env}'] 
         strategy:
           runOnce:
