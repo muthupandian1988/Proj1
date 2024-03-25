@@ -1,35 +1,18 @@
-parameters:
-- name: environment  # defaults for any parameters that aren't specified
-  default: ''
-- name: appservice
-  default: ''
+
 
 stages:
-  - stage: DeployStage${{parameters.environment}}
-    displayName: ' Deployed to ${{parameters.environment}}'
+  - stage: DeployStage$[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+    displayName: ' Deployed to $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]'
+    dependsOn: ChooseEnvStage
     jobs:
-      - deployment: ${{parameters.environment }}
-        displayName: ${{parameters.environment }} 'deployment'
-        environment: ${{parameters.environment }}
+      - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']] 'deployment'
+        environment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
         strategy:
           runOnce:
             deploy:
               steps:
-                - task: Bash@3
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your commands here
-                      env="$(./1.sh env $(Build.SourceBranchName))"
-                      echo "##vso[task.setvariable variable=env]$env"       
-      
-                - task: Bash@3
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      # Write your commands here
-                      appservice="$(./1.sh appservice $(Build.SourceBranchName))"
-                      echo "##vso[task.setvariable variable=appservice]$appservice"
+                
       
                 - task: DownloadPipelineArtifact@2
                   inputs:
@@ -45,5 +28,5 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'DevopsLearnAppService'
                     appType: 'webApp'
-                    WebAppName: ${{parameters.appservice }}
+                    WebAppName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['appservice']]
                     packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
