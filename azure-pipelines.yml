@@ -29,7 +29,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      ##vso[task.setvariable variable=fileversion]$(./1.sh)
+      ##vso[task.setvariable variable=fileversion] ./1.sh
       echo $(fileversion)
     
 # stages:
