@@ -3,9 +3,9 @@ stages:
     displayName: "Deployed to App service"
     dependsOn: ChooseEnvStage
     jobs:
-      - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-        environment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+      - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['ChooseEnvJob.env']]
+        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['ChooseEnvJob.env']]
+        environment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['ChooseEnvJob.env']]
         strategy:
           runOnce:
             deploy:
