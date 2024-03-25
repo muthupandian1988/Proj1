@@ -29,8 +29,9 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      ##vso[task.setvariable variable=fileversion] ./1.sh
-      echo $(fileversion)
+      FILE_VERSION="$(./1.sh)"
+      echo "##vso[task.setvariable variable=FILE_VERSION]$FILE_VERSION"
+      echo $(FILE_VERSION)
     
 # stages:
 #   - stage: BuildStage
