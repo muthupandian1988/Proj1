@@ -2,14 +2,16 @@
 branch=$1
 env="dev"
 shopt -s nocasematch
-if [ "$1" == "master" ];
+if [ "$2" == "master" ];
 then
 	case $1 in 'env')
 	echo 'Production'
 	;;
-	'appservice'
-	echo Production-Appservice'
-elif [ "$1" == "QA" ];
+	'appservice')
+	echo 'Production-Appservice'
+	;;
+	esac
+elif [ "$2" == "QA" ];
 then
 	echo "QA"
 	echo 'QA - App service'
