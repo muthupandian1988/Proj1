@@ -26,7 +26,7 @@ steps:
     script: |
       # Write your commands here
       env="$(./1.sh 'env' $(Build.SourceBranchName))"
-      echo "##vso[task.setvariable variable=env;isOutput=true]$env"
+      echo "##vso[task.setvariable variable=env]$env"
       
 - task: Bash@3
   inputs:
@@ -34,7 +34,7 @@ steps:
     script: |
       # Write your commands here
       appservice="$(./1.sh 'appservice' $(Build.SourceBranchName))"
-      echo "##vso[task.setvariable variable=appservice;isOutput=true]$appservice"
+      echo "##vso[task.setvariable variable=appservice]$appservice"
       
 
 - task: Bash@3
