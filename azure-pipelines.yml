@@ -28,7 +28,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      FILE_VERSION="$(./1.sh)"
+      FILE_VERSION="$(./1.sh $(Build.SourceBranchName))"
       echo "##vso[task.setvariable variable=FILE_VERSION]$FILE_VERSION"
       
     
