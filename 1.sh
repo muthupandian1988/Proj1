@@ -10,6 +10,9 @@ then
 	'appservice')
 	echo 'Production-Appservice'
 	;;
+	*)
+    echo -n "Invalid"
+    ;;
 	esac
 elif [ "$2" == "QA" ];
 then
