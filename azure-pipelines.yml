@@ -30,7 +30,7 @@ steps:
       # Write your commands here
       FILE_VERSION="$(./1.sh)"
       echo "##vso[task.setvariable variable=FILE_VERSION]$FILE_VERSION"
-      echo $(FILE_VERSION)
+      
     
 # stages:
 #   - stage: BuildStage
