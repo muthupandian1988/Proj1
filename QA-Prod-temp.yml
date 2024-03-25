@@ -1,11 +1,11 @@
 stages:
-  - stage: DeployStage$[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-    displayName: "Deployed to $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]"
+  - stage: DeployStage$[dependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+    displayName: "Deployed to $[dependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]"
     dependsOn: ChooseEnvStage
     jobs:
-      - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-        displayName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-        environment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+      - deployment: $[dependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+        displayName: $[dependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
+        environment: $[dependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
         strategy:
           runOnce:
             deploy:
@@ -24,5 +24,5 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'DevopsLearnAppService'
                     appType: 'webApp'
-                    WebAppName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['appservice']]
+                    WebAppName: $[dependencies.ChooseEnvStage.ChooseEnvJob.outputs['appservice']]
                     packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
