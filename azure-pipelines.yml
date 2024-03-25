@@ -25,7 +25,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      env="$(./1.sh 'env' $(Build.SourceBranchName))"
+      env="$(./1.sh env $(Build.SourceBranchName))"
       echo "##vso[task.setvariable variable=env]$env"
       
 - task: Bash@3
@@ -33,7 +33,7 @@ steps:
     targetType: 'inline'
     script: |
       # Write your commands here
-      appservice="$(./1.sh 'appservice' $(Build.SourceBranchName))"
+      appservice="$(./1.sh appservice $(Build.SourceBranchName))"
       echo "##vso[task.setvariable variable=appservice]$appservice"
       
 
