@@ -1,6 +1,6 @@
 stages:
   - stage: DeployStage$[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
-    displayName: ' Deployed to $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]'
+    displayName: "Deployed to $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]"
     dependsOn: ChooseEnvStage
     jobs:
       - deployment: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['env']]
