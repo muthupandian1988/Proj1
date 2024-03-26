@@ -24,7 +24,7 @@ stages:
                 script: |
                   # Write your commands here
                   
-                  echo 'Hello world ' $(env);
+                  echo '$(storevalue.env)''
     - stage: SecondStage
       jobs: 
         - job: secondjob
