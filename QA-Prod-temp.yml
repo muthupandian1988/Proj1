@@ -19,8 +19,11 @@ stages:
       - deployment:  Deploy
         displayName: 'Deploy stage' 
         dependsOn: tempjob
-        environment: 
-          name: ${{ variables.environmentname }}
+        ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+           environment: 'Production'
+        ${{ if eq(variables['Build.SourceBranchName'], 'QA') }}:
+            environment: 'QA'
+        
         strategy:
           runOnce:
             deploy:
