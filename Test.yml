@@ -16,7 +16,7 @@ stages:
               inputs:
                 targetType: 'inline'
                 script: |
-                  env= "$(./1.sh env master)"
+                  $env= "$(./1.sh env master)"
                   echo "##vso[task.setvariable variable=env]$env"      
             - task: Bash@3
               inputs:
