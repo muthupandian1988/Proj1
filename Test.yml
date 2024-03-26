@@ -24,7 +24,7 @@ stages:
                 script: |
                   # Write your commands here
                   
-                  echo 'Hello world $(env)';
+                  echo 'Hello world ' $(env);
     - stage: SecondStage
       jobs: 
         - job: secondjob
