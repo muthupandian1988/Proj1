@@ -7,8 +7,8 @@ parameters:
   default: 'Dev-DevOpsLearn'
 
 jobs:
-  - deployment:  ${{parameters.environment}} 
-    displayName: ${{parameters.environment}} 
+  - deployment:  Deploy
+    displayName: 'Deploy stage' 
     environment: ${{parameters.environment}} 
     strategy:
        runOnce:
