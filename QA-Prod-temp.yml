@@ -7,9 +7,19 @@ stages:
         appServicename: $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeappservicevalue.appservice'] ]
     displayName: 'Deploy'
     jobs:
+      - job: tempjob
+        steps:
+        - task: Bash@3
+          name: storeappservicevalue
+          inputs:
+                  targetType: 'inline'
+                  script: |
+                    echo $(environmentname)
+
       - deployment:  Deploy
         displayName: 'Deploy stage' 
-        environment: 'Production'
+        dependsOn: tempjob
+        environment: $(environmentname)
         strategy:
           runOnce:
             deploy:
