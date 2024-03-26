@@ -1,5 +1,8 @@
 trigger:
 - main
+- dev
+- QA
+
 
 pool:
   vmImage: 'windows-latest'
@@ -7,28 +10,27 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
+  environment : 'development'
   buildConfiguration: 'Release'
-
+    
 stages:
   - stage: BuildStage
     displayName: 'Build'
     jobs:
       - job: Buildjob
         steps:
-        
         - task: DotNetCoreCLI@2
           displayName: 'Restore Nuget' 
           inputs:
             command: 'restore'
             projects: '$(solution)'
             feedsToUse: 'select'
-
         - task: DotNetCoreCLI@2
           displayName: 'Build solution' 
           inputs:
             projects: '$(solution)'
             command: 'build'
-            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration)'
 
         - task: DotNetCoreCLI@2
           displayName: 'Run tests'
@@ -47,38 +49,34 @@ stages:
           inputs:
             projects: '$(solution)'
             command: 'publish'
-            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
             artifact: 'drop'
             publishLocation: 'pipeline'
 
-  - stage: DeployStageDev
-    displayName: 'Deploy Dev'
+  - stage: ChooseEnvStage
+    dependsOn: BuildStage
+    displayName: 'Choose env'
     jobs:
-      - job:
-        steps:        
-        - task: DownloadPipelineArtifact@2
+     - job: ChooseEnvJob
+       steps:
+        - task: Bash@3
+          name: storeenvvalue
           inputs:
-            buildType: 'current'
-            artifactName: 'drop'
-            targetPath: '$(Pipeline.Workspace)/drop'
-        - powershell: |
-            Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
-
-        - task: AzureRmWebAppDeployment@4
+                targetType: 'inline'
+                script: |
+                  env="$(./1.sh env $(Build.SourceBranchName))"
+                  echo "##vso[task.setvariable variable=env;isOutput=true]$env"       
+        - task: Bash@3
+          name: storeappservicevalue
           inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'DevopsLearnAppService'
-            appType: 'webApp'
-            WebAppName: 'Dev-DevOpsLearn'
-            packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+                targetType: 'inline'
+                script: |
+                  appservice="$(./1.sh appservice $(Build.SourceBranchName))"
+                  echo "##vso[task.setvariable variable=appservice;isOutput=true]$appservice"       
+  
   - template: 'QA-Prod-temp.yml'
-    parameters:
-      environment: 'QA'
-      appservice: 'QA-DevopsLearn'
-  - template: 'QA-Prod-temp.yml'
-    parameters:
-      environment: 'Production'
-      appservice: 'Prod-DevopsLearn'
+  
+      
