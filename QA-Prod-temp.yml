@@ -1,13 +1,12 @@
-  parameters:
-  - name: environment
-    type: string
-    default: 'dev'
-  - name: appservice
-    type: string
-    default: 'Dev-DevOpsLearn'
+parameters:
+- name: environment
+  type: string
+  default: 'dev'
+- name: appservice
+  type: string
+  default: 'Dev-DevOpsLearn'
 
-
-    jobs:
+jobs:
       - deployment: $(environment) 
         displayName: $(environment) 'Deployment'
         environment: environment
