@@ -3,6 +3,7 @@ trigger:
 - dev
 - QA
 
+
 pool:
   vmImage: 'windows-latest'
 
@@ -48,7 +49,7 @@ stages:
           inputs:
             projects: '$(solution)'
             command: 'publish'
-            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactStagingDirectory)'
