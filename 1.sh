@@ -5,11 +5,9 @@ shopt -s nocasematch
 if [ "$2" == "master" ];
 then
 	case $1 in 'env')
-	echo 'Production'
-	;;
+	echo 'Production';;
 	'appservice')
-	echo 'Production-Appservice'
-	;;
+	echo 'Production-Appservice';;
 	*)
     echo -n "Invalid"
     ;;
