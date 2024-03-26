@@ -16,7 +16,7 @@ stages:
               inputs:
                 targetType: 'inline'
                 script: |
-                  env= "$(./1.sh env $(Build.SourceBranchName))"
+                  env= "$(./1.sh env master)"
                   echo "##vso[task.setvariable variable=isOutput=true]$env"      
             - task: Bash@3
               inputs:
@@ -32,6 +32,6 @@ stages:
           - task: Bash@3
             inputs:
               targetType: 'inline'
-              script: 'echo $[dependencies.firststage.firstjob.outputs["storevalue.env"]]'
+              script: 'echo $[ dependencies.firststage.firstjob.outputs["storevalue.env"] ]'
 
 
