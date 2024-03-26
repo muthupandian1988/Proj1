@@ -26,5 +26,5 @@ jobs:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'DevopsLearnAppService'
                     appType: 'webApp'
-                    WebAppName: ${{parameters.environment}} 
+                    WebAppName: ${{parameters.appservice}} 
                     packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
