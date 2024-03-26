@@ -3,6 +3,7 @@ trigger:
 - dev
 - QA
 
+
 pool:
   vmImage: 'windows-latest'
 
