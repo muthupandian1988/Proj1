@@ -6,17 +6,32 @@ if [ "$2" == "master" ];
 then
 	case $1 in 'env')
 	echo 'Production';;
+	
 	'appservice')
-	echo 'Production-Appservice';;
+	echo 'Prod-DevopsLearn';;
 	*)
     echo -n "Invalid"
     ;;
 	esac
 elif [ "$2" == "QA" ];
 then
-	echo "QA"
-	echo 'QA - App service'
+	case $1 in 'env')
+	echo 'QA';;
+	
+	'appservice')
+	echo 'QA-DevopsLearn';;
+	*)
+    echo -n "Invalid"
+    ;;
+	esac
 else
-	echo "dev"
-	echo 'dev - App service'
+	case $1 in 'env')
+	echo 'dev';;
+	
+	'appservice')
+	echo 'Dev-DevOpsLearn';;
+	*)
+    echo -n "Invalid"
+    ;;
+	esac
 fi

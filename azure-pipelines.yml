@@ -12,112 +12,80 @@ variables:
   environment : 'development'
   buildConfiguration: 'Release'
     
+stages:
+  - stage: BuildStage
+    displayName: 'Build'
+    jobs:
+      - job: Buildjob
+        steps:
+        - task: DotNetCoreCLI@2
+          displayName: 'Restore Nuget' 
+          inputs:
+            command: 'restore'
+            projects: '$(solution)'
+            feedsToUse: 'select'
+        - task: DotNetCoreCLI@2
+          displayName: 'Build solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'build'
+            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-steps:
+        - task: DotNetCoreCLI@2
+          displayName: 'Run tests'
+          inputs:
+            command: 'test'
+            projects: 'TestProject\TestProject.csproj'
+            arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
+        - task: PublishCodeCoverageResults@2
+          displayName: 'Publish code coverage' 
+          inputs:
+            failIfCoverageEmpty: true
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
+        - task: DotNetCoreCLI@2
+          displayName: 'Publish solution' 
+          inputs:
+            projects: '$(solution)'
+            command: 'publish'
+            configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Build.ArtifactStagingDirectory)'
+            artifact: 'drop'
+            publishLocation: 'pipeline'
 
-- task: Bash@3
-  inputs:
-    filePath: '1.sh'
-    arguments: 'env $(Build.SourceBranchName)'
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Write your commands here
-      env="$(./1.sh env $(Build.SourceBranchName))"
-      echo "##vso[task.setvariable variable=env]$env"
-      
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Write your commands here
-      appservice="$(./1.sh appservice $(Build.SourceBranchName))"
-      echo "##vso[task.setvariable variable=appservice]$appservice"
-      
-
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Write your commands here
-      echo $(env)
-      echo $(appservice)
-      
-    
-# stages:
-#   - stage: BuildStage
-#     displayName: 'Build'
-#     jobs:
-#       - job: Buildjob
-#         steps:
+  - stage: ChooseEnv
+    dependsOn: BuildStage
+    displayName: 'Choose env'
+    jobs:
+     - job: ChooseEnvJob
+       steps:
+        - task: Bash@3
+          name: storeenvvalue
+          inputs:
+                targetType: 'inline'
+                script: |
+                  env="$(./1.sh env $(Build.SourceBranchName))"
+                  echo "##vso[task.setvariable variable=env;isOutput=true]$env"       
+        - task: Bash@3
+          name: storeappservicevalue
+          inputs:
+                targetType: 'inline'
+                script: |
+                  appservice="$(./1.sh appservice $(Build.SourceBranchName))"
+                  echo "##vso[task.setvariable variable=appservice;isOutput=true]$appservice"       
         
-
-#         - task: DotNetCoreCLI@2
-#           displayName: 'Restore Nuget' 
-#           inputs:
-#             command: 'restore'
-#             projects: '$(solution)'
-#             feedsToUse: 'select'
-
-#         - task: DotNetCoreCLI@2
-#           displayName: 'Build solution' 
-#           inputs:
-#             projects: '$(solution)'
-#             command: 'build'
-#             arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-
-#         - task: DotNetCoreCLI@2
-#           displayName: 'Run tests'
-#           inputs:
-#             command: 'test'
-#             projects: 'TestProject\TestProject.csproj'
-#             arguments: '--configuration $(BuildConfiguration) --collect:"XPlat Code Coverage"'      
-#         - task: PublishCodeCoverageResults@2
-#           displayName: 'Publish code coverage' 
-#           inputs:
-#             failIfCoverageEmpty: true
-#             summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
-
-#         - task: DotNetCoreCLI@2
-#           displayName: 'Publish solution' 
-#           inputs:
-#             projects: '$(solution)'
-#             command: 'publish'
-#             configuration: '--c $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-#         - task: PublishPipelineArtifact@1
-#           inputs:
-#             targetPath: '$(Build.ArtifactStagingDirectory)'
-#             artifact: 'drop'
-#             publishLocation: 'pipeline'
-
-#   - stage: DeployStageDev
-#     displayName: 'Deploy Dev'
-#     jobs:
-#       - job:
-#         steps:        
-#         - task: DownloadPipelineArtifact@2
-#           inputs:
-#             buildType: 'current'
-#             artifactName: 'drop'
-#             targetPath: '$(Pipeline.Workspace)/drop'
-#         - powershell: |
-#             Compress-Archive -Path "$(Pipeline.Workspace)/drop/*" -DestinationPath "$(Pipeline.Workspace)/drop.zip" -Force
-
-#         - task: AzureRmWebAppDeployment@4
-#           inputs:
-#             ConnectionType: 'AzureRM'
-#             azureSubscription: 'DevopsLearnAppService'
-#             appType: 'webApp'
-#             WebAppName: 'Dev-DevOpsLearn'
-#             packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
-#   - template: 'QA-Prod-temp.yml'
-#     parameters:
-#       environment: 'QA'
-#       appservice: 'QA-DevopsLearn'
-#   - template: 'QA-Prod-temp.yml'
-    # parameters:
-    #   environment: 'Production'
-    #   appservice: 'Prod-DevopsLearn'
+  - stage: DeployStage
+    dependsOn: ChooseEnv
+    variables: 
+      environmentname:  $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeenvvalue.env']]
+      appServicename: $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeappservicevalue.appservice']]
+    displayName: 'Deploy '
+    jobs:
+      - template: 'QA-Prod-temp.yml'
+        parameters:
+          environment: environmentname
+          appservice: appServicename
+      
 

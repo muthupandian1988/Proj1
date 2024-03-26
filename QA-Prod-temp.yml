@@ -1,34 +1,16 @@
-stages:
-  - stage: ChooseEnvStage
-    displayName: 'Choose environment'
-    jobs:
-      - job: ChooseEnvJob
-        steps:
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            name: envscript
-            script: |
-              # Write your commands here
-              env="$(./1.sh env $(Build.SourceBranchName))"
-              echo "##vso[task.setvariable variable=env;isOutput=true]$env"       
-        
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            name: appservicescript
-            script: |
-             # Write your commands here
-             appservice="$(./1.sh appservice $(Build.SourceBranchName))"
-             echo "##vso[task.setvariable variable=appservice;isOutput=true]$appservice"
+  parameters:
+  - name: environment
+    type: string
+    default: 'dev'
+  - name: appservice
+    type: string
+    default: 'Dev-DevOpsLearn'
 
-  - stage: DeployStage
-    displayName: "Deployed to App service"
-    dependsOn: ChooseEnvStage
+
     jobs:
-      - deployment: $[ stageDependencies.{ChooseEnvStage}.{ChooseEnvJob}.outputs['{envscript}.{env}'] 
-        displayName: 'Deployment'
-        environment: $[ stageDependencies.{ChooseEnvStage}.{ChooseEnvJob}.outputs['{envscript}.{env}'] 
+      - deployment: $(environment) 
+        displayName: $(environment) 'Deployment'
+        environment: environment
         strategy:
           runOnce:
             deploy:
@@ -47,5 +29,5 @@ stages:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'DevopsLearnAppService'
                     appType: 'webApp'
-                    WebAppName: $[stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['appservice']]
+                    WebAppName: $(appservice)
                     packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
