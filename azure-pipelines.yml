@@ -10,7 +10,7 @@ pool:
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
-  environment : 'development'
+  environment: 'development'
   buildConfiguration: 'Release'
     
 stages:
