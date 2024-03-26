@@ -1,3 +1,4 @@
+
 stages:
   - stage: DeployStage
     dependsOn: ChooseEnvStage
@@ -8,7 +9,7 @@ stages:
     jobs:
       - deployment:  Deploy
         displayName: 'Deploy stage' 
-        environment: $(environmentname)
+        environment: 'Production'
         strategy:
           runOnce:
             deploy:
