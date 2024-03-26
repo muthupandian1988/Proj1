@@ -7,9 +7,9 @@ parameters:
   default: 'Dev-DevOpsLearn'
 
 jobs:
-      - deployment: $(environment) 
-        displayName: $(environment) 'Deployment'
-        environment: environment
+      - deployment:  ${{parameters.environment}} 
+        displayName: ${{parameters.environment}}  'Deployment'
+        environment: ${{parameters.environment}} 
         strategy:
           runOnce:
             deploy:
@@ -28,5 +28,5 @@ jobs:
                     ConnectionType: 'AzureRM'
                     azureSubscription: 'DevopsLearnAppService'
                     appType: 'webApp'
-                    WebAppName: $(appservice)
+                    WebAppName: ${{parameters.environment}} 
                     packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
