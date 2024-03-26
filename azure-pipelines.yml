@@ -76,22 +76,12 @@ stages:
                 script: |
                   appservice="$(./1.sh appservice $(Build.SourceBranchName))"
                   echo "##vso[task.setvariable variable=appservice;isOutput=true]$appservice"       
-        - task: Bash@3
-          inputs:
-            targetType: 'inline'
-            script: |
-              # Write your commands here
-              
-              echo 'environment name:' $(storeenvvalue.env)
-              
-              echo 'app service name:' $(storeappservicevalue.appservice)
-
   - stage: DeployStage
     dependsOn: ChooseEnvStage
     variables: 
       environmentname:  $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeenvvalue.env'] ]
       appServicename: $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeappservicevalue.appservice'] ]
-    displayName: 'Deploy '
+    displayName: 'Deploy'
     jobs:
       - template: 'QA-Prod-temp.yml'
         parameters:
