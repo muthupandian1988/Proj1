@@ -30,7 +30,7 @@ stages:
           inputs:
             projects: '$(solution)'
             command: 'build'
-            arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            arguments: '--configuration $(buildConfiguration)'
 
         - task: DotNetCoreCLI@2
           displayName: 'Run tests'
