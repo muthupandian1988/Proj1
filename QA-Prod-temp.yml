@@ -19,7 +19,8 @@ stages:
       - deployment:  Deploy
         displayName: 'Deploy stage' 
         dependsOn: tempjob
-        environment: $(environmentname)
+        environment: 
+          name: ${{ variable.environmentname }}
         strategy:
           runOnce:
             deploy:
