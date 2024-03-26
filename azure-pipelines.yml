@@ -100,19 +100,19 @@ stages:
               script: |
                 # Write your commands here
                 
-                echo 'ENVIRONMENT name is: ' $(environmentname)
-                 echo 'App service name is: ' $(appServicename)
+                echo 'ENVIRONMENT name is:' $(environmentname)
+                 echo 'App service name is:' $(appServicename)
 
-  - stage: DeployStage
-    dependsOn: ChooseEnv
-    variables: 
-      environmentname:  $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeenvvalue.env'] ]
-      appServicename: $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeappservicevalue.appservice'] ]
-    displayName: 'Deploy '
-    jobs:
-      - template: 'QA-Prod-temp.yml'
-        parameters:
-          environment: $(environmentname)
-          appservice: $(appServicename)
+  # - stage: DeployStage
+  #   dependsOn: ChooseEnv
+  #   variables: 
+  #     environmentname:  $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeenvvalue.env'] ]
+  #     appServicename: $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeappservicevalue.appservice'] ]
+  #   displayName: 'Deploy '
+  #   jobs:
+  #     - template: 'QA-Prod-temp.yml'
+  #       parameters:
+  #         environment: $(environmentname)
+  #         appservice: $(appServicename)
       
 
