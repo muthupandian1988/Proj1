@@ -5,10 +5,12 @@ shopt -s nocasematch
 if [ "$2" == "master" ];
 then
 	case $1 in 'env')
-	echo 'Production';;
+	echo 'Production'
+	;;
 	
 	'appservice')
-	echo 'Prod-DevopsLearn';;
+	echo 'Prod-DevopsLearn'
+	;;
 	*)
     echo -n "Invalid"
     ;;
@@ -16,20 +18,24 @@ then
 elif [ "$2" == "QA" ];
 then
 	case $1 in 'env')
-	echo 'QA';;
+	echo 'QA'
+	;;
 	
 	'appservice')
-	echo 'QA-DevopsLearn';;
+	echo 'QA-DevopsLearn'
+	;;
 	*)
     echo -n "Invalid"
     ;;
 	esac
 else
 	case $1 in 'env')
-	echo 'dev';;
+	echo 'dev'
+	;;
 	
 	'appservice')
-	echo 'Dev-DevOpsLearn';;
+	echo 'Dev-DevOpsLearn'
+	;;
 	*)
     echo -n "Invalid"
     ;;
