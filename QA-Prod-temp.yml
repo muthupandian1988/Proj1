@@ -1,37 +1,35 @@
-parameters:
-- name: environment
-  type: string
-  default: 'dev'
-- name: appservice
-  type: string
-  default: 'Dev-DevOpsLearn'
-
-
-jobs:
-  - deployment:  Deploy
-    displayName: 'Deploy stage' 
-    environment: ${{parameters.environment}} 
-    strategy:
-       runOnce:
-        deploy:
-          steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-                    buildType: 'current'
-                    artifactName: 'drop'
-                    targetPath: '$(Pipeline.Workspace)/drop'
-          - task: Bash@3
-            inputs:
-                targetType: 'inline'
-                script: |
-                  
-                  echo 'environment name:' ${{parameters.environment}} 
-                  
-                  echo 'app service name:' ${{parameters.appservice}} 
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-                    ConnectionType: 'AzureRM'
-                    azureSubscription: 'DevopsLearnAppService'
-                    appType: 'webApp'
-                    WebAppName: ${{parameters.appservice}} 
-                    packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
+stages:
+  - stage: DeployStage
+    dependsOn: ChooseEnvStage
+    variables: 
+        environmentname:  $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeenvvalue.env'] ]
+        appServicename: $[ stageDependencies.ChooseEnvStage.ChooseEnvJob.outputs['storeappservicevalue.appservice'] ]
+    displayName: 'Deploy'
+    jobs:
+      - deployment:  Deploy
+        displayName: 'Deploy stage' 
+        environment: $(environmentname)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                        buildType: 'current'
+                        artifactName: 'drop'
+                        targetPath: '$(Pipeline.Workspace)/drop'
+              - task: Bash@3
+                inputs:
+                    targetType: 'inline'
+                    script: |
+                      
+                      echo 'environment name:' ${{parameters.environment}} 
+                      
+                      echo 'app service name:' ${{parameters.appservice}} 
+              - task: AzureRmWebAppDeployment@4
+                inputs:
+                        ConnectionType: 'AzureRM'
+                        azureSubscription: 'DevopsLearnAppService'
+                        appType: 'webApp'
+                        WebAppName: $(appServicename)
+                        packageForLinux: '$(Pipeline.Workspace)/**/*.zip'
