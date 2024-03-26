@@ -82,9 +82,9 @@ stages:
             script: |
               # Write your commands here
               
-              echo 'environment name:' $(storeenvvalue.environmentname)
+              echo 'environment name:' $(storeenvvalue.env)
               
-              echo 'app service name:' $(storeappservicevalue.appServicename)
+              echo 'app service name:' $(storeappservicevalue.appservice)
   - stage: DeployStage
     dependsOn: ChooseEnv
     variables: 
@@ -95,7 +95,7 @@ stages:
     
       - template: 'QA-Prod-temp.yml'
         parameters:
-          environment: environmentname
-          appservice: appServicename
+          environment: $(environmentname)
+          appservice: $(appServicename)
       
 
