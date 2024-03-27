@@ -38,9 +38,9 @@ stages:
                     targetType: 'inline'
                     script: |
                       
-                      echo 'environment name:' ${{parameters.environment}} 
+                      echo 'environment name:' $(environmentname)
                       
-                      echo 'app service name:' ${{parameters.appservice}} 
+                      echo 'app service name:' $(appServicename)
               - task: AzureRmWebAppDeployment@4
                 inputs:
                         ConnectionType: 'AzureRM'
