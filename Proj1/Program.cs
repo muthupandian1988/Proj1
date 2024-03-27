@@ -1,14 +1,24 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
+// Add services to the container.
+var env = builder.Environment.EnvironmentName;
+IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env}.json", optional: true)
+                .Build();
+var connections = configuration.GetSection("Connections").Get<Proj1.Connections>();
+builder.Services.AddSingleton(connections);
+//                                .AddEnvironmentVariables().Build();
+//builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+//                .AddJsonFile($"appsettings.{env}.json", optional: true);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-string env = app.Environment.EnvironmentName;
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
@@ -16,6 +26,7 @@ string env = app.Environment.EnvironmentName;
 //    app.UseSwaggerUI();
 //}
 
+var con = app.Configuration.GetRequiredSection("Connections");
 
 app.UseSwagger();
 app.UseSwaggerUI();
