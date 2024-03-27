@@ -23,7 +23,6 @@ stages:
            environment: 'Production'
         ${{ if eq(variables['Build.SourceBranchName'], 'QA') }}:
             environment: 'QA'
-
         ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
             environment: 'dev'
         strategy:

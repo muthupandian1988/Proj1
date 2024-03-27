@@ -44,6 +44,7 @@ stages:
             failIfCoverageEmpty: true
             summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
+
         - task: DotNetCoreCLI@2
           displayName: 'Publish solution' 
           inputs:
