@@ -23,9 +23,9 @@ stages:
            environment: 'Production'
         ${{ if eq(variables['Build.SourceBranchName'], 'QA') }}:
             environment: 'QA'
+
         ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
             environment: 'dev'
-        
         strategy:
           runOnce:
             deploy:
@@ -39,10 +39,8 @@ stages:
                 inputs:
                     targetType: 'inline'
                     script: |
-                      
-                      echo 'environment name:' ${{parameters.environment}} 
-                      
-                      echo 'app service name:' ${{parameters.appservice}} 
+                      echo 'environment name:' $(environmentname)                   
+                      echo 'app service name:' $(appServicename)
               - task: AzureRmWebAppDeployment@4
                 inputs:
                         ConnectionType: 'AzureRM'

@@ -78,5 +78,3 @@ stages:
                   echo "##vso[task.setvariable variable=appservice;isOutput=true]$appservice"       
   
   - template: 'QA-Prod-temp.yml'
-  
-      
