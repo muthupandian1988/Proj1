@@ -200,10 +200,6 @@
         "administratorLogin": {
             "value": "appservice"
         },
-        "administratorLoginPassword": {
-			"type": "secureString",
-            "value": "Mut#123$"
-        },
         "administrators": {
             "value": {
                 "administratorType": "activeDirectory",

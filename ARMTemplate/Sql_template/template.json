@@ -8,7 +8,7 @@
         },
         "administratorLoginPassword": {
             "type": "securestring",
-            "defaultValue": ""
+            "defaultValue": "Mut#123$"
         },
         "administrators": {
             "type": "object",
