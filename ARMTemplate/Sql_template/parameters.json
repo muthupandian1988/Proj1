@@ -201,6 +201,7 @@
             "value": "appservice"
         },
         "administratorLoginPassword": {
+			"type": "secureString",
             "value": "Mut#123$"
         },
         "administrators": {
