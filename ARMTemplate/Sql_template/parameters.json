@@ -201,7 +201,7 @@
             "value": "appservice"
         },
         "administratorLoginPassword": {
-            "value": null
+            "value": "Mut#123$"
         },
         "administrators": {
             "value": {
