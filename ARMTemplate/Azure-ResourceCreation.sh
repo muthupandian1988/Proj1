@@ -1,0 +1,5 @@
+New-AzResourceGroupDeployment -ResourceGroupName "RG-Muthu-AppService" -TemplateUri "https://raw.githubusercontent.com/muthupandian1988/Proj1/master/ARMTemplate/AppService_template/template.json" -TemplateParameterUri "https://raw.githubusercontent.com/muthupandian1988/Proj1/master/ARMTemplate/AppService_template/parameters.json"
+
+New-AzResourceGroupDeployment -ResourceGroupName "RG-Muthu-AppService" -TemplateUri "https://raw.githubusercontent.com/muthupandian1988/Proj1/master/ARMTemplate/Sql_template/template.json" -TemplateParameterUri "https://raw.githubusercontent.com/muthupandian1988/Proj1/master/ARMTemplate/Sql_template/parameters.json"
+
+New-AzResourceGroupDeployment -ResourceGroupName "RG-Muthu-AppService" -TemplateUri "https://raw.githubusercontent.com/muthupandian1988/Proj1/master/ARMTemplate/Sql_template-Products/template.json" -TemplateParameterUri "https://raw.githubusercontent.com/muthupandian1988/Proj1/master/ARMTemplate/Sql_template-Products/parameters.json"
